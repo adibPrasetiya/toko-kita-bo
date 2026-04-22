@@ -1,4 +1,3 @@
-import { DEV_SERIAL_NUMBER } from "../../core/config/app.constant.js";
 import { prismaClient } from "../../core/lib/database.lib.js";
 import { BadRequestError } from "../../error/bad-request.error.js";
 import { NotFoundError } from "../../error/not-found.error.js";
@@ -188,6 +187,19 @@ const reset = async (serialNumberId) => {
       "Gagal mereset serial number. Serial number masih tersedia",
     );
   }
+
+  await prismaClient.serialNumbers.update({
+    where: {
+      serialNumberId: serialNumberId,
+    },
+    data: {
+      deviceId: null,
+      isActivate: false,
+      clientName: null,
+      clientPhoneNumber: null,
+      shopName: null,
+    },
+  });
 
   return {
     message: "Serial number berhasil di reset",
