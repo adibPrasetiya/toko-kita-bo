@@ -10,6 +10,7 @@ import {
   registerDeviceSchema,
   searchSerialNumberSchema,
   serialNumberSchema,
+  setStatusSchema,
 } from "./serial-number.validation.js";
 
 const createBulk = async (number = 10) => {
@@ -206,4 +207,41 @@ const reset = async (serialNumberId) => {
   };
 };
 
-export default { createBulk, search, check, register, reset };
+const setStatus = async (body, serialNumberId) => {
+  body.serialNumberId = serialNumberId;
+  body = validate(setStatusSchema, body);
+
+  const serialNumber = await prismaClient.serialNumbers.findUnique({
+    where: {
+      serialNumberId: serialNumberId,
+    },
+  });
+
+  if (!serialNumber) {
+    throw new NotFoundError("Serial number tidak ditemukan");
+  }
+
+  const updatedData = {};
+
+  if (body.status) {
+    updatedData.status = body.status;
+  }
+
+  if (body.notes) {
+    updatedData.notes = body.notes;
+  }
+
+  const update = await prismaClient.serialNumbers.update({
+    where: {
+      serialNumberId: serialNumberId,
+    },
+    data: updatedData,
+  });
+
+  return {
+    message: "Status serial number berhasil di perbarui",
+    data: update,
+  };
+};
+
+export default { createBulk, search, check, register, reset, setStatus };

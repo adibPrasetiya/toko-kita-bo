@@ -16,4 +16,9 @@ export const protectedSerialNumberRoutes = [
     method: "patch",
     handler: serialNumberController.reset,
   },
+  {
+    path: "/serial-numbers/:serialNumberId/set",
+    method: "patch",
+    handler: serialNumberController.setStatus,
+  },
 ];

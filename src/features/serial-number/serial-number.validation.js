@@ -1,7 +1,6 @@
 import Joi from "joi";
 
-const createBulkSerialNumberSchema = Joi
-  .number()
+const createBulkSerialNumberSchema = Joi.number()
   .max(100)
   .min(1)
   .positive()
@@ -13,10 +12,9 @@ const createBulkSerialNumberSchema = Joi
     "number.max": "Jumlah maksimal 100",
     "number.positive": "Jumlah harus bernilai positif",
     "any.required": "Jumlah wajib diisi",
-  })
+  });
 
-const serialNumberSchema = Joi
-  .string()
+const serialNumberSchema = Joi.string()
   .length(8)
   .pattern(/^[A-Z0-9]+$/)
   .required()
@@ -26,17 +24,13 @@ const serialNumberSchema = Joi
     "string.length": "Serial number harus tepat 16 karakter",
     "string.pattern.base": "Serial number hanya boleh huruf besar dan angka",
     "any.required": "Serial number wajib diisi",
-});
+  });
 
 const searchSerialNumberSchema = Joi.object({
-  serialNumberId: Joi
-    .string()
-    .max(8)
-    .optional()
-    .messages({
-      "string.base": "Serial number harus berupa teks",
-      "string.empty": "Serial number tidak boleh kosong",
-      "string.max": "Serial number maksimal 8 karakter",
+  serialNumberId: Joi.string().max(8).optional().messages({
+    "string.base": "Serial number harus berupa teks",
+    "string.empty": "Serial number tidak boleh kosong",
+    "string.max": "Serial number maksimal 8 karakter",
   }),
 
   isActivate: Joi.boolean().optional().messages({
@@ -104,4 +98,38 @@ const registerDeviceSchema = Joi.object({
   }),
 });
 
-export { serialNumberSchema, createBulkSerialNumberSchema, searchSerialNumberSchema, registerDeviceSchema }
+const setStatusSchema = Joi.object({
+  serialNumberId: Joi.string()
+    .length(8)
+    .pattern(/^[A-Z0-9]+$/)
+    .required()
+    .messages({
+      "string.base": "Serial number harus berupa teks",
+      "string.empty": "Serial number tidak boleh kosong",
+      "string.length": "Serial number harus tepat 8 karakter",
+      "string.pattern.base": "Serial number hanya boleh huruf besar dan angka",
+      "any.required": "Serial number wajib diisi",
+    }),
+
+  status: Joi.string().valid("AVAILABLE", "SELL", "SOLD").optional().messages({
+    "string.base": "Status harus berupa teks",
+    "any.only": "Status hanya boleh AVAILABLE, SELL, atau SOLD",
+  }),
+
+  notes: Joi.string().max(255).optional().messages({
+    "string.base": "Notes harus berupa teks",
+    "string.max": "Notes maksimal 255 karakter",
+  }),
+})
+  .or("status", "notes") // 👈 ini kuncinya
+  .messages({
+    "object.missing": "Minimal harus mengisi status atau notes",
+  });
+
+export {
+  serialNumberSchema,
+  createBulkSerialNumberSchema,
+  searchSerialNumberSchema,
+  registerDeviceSchema,
+  setStatusSchema,
+};

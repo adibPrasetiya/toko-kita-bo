@@ -75,4 +75,22 @@ const reset = async (req, res, next) => {
   }
 };
 
-export default { createBulk, search, check, register, reset };
+const setStatus = async (req, res, next) => {
+  try {
+    const reqBody = req.body;
+    const { serialNumberId } = req.params;
+
+    const result = await serialNumberService.setStatus(reqBody, serialNumberId);
+    res
+      .status(200)
+      .json({
+        message: result.message,
+        data: result.data,
+      })
+      .end();
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { createBulk, search, check, register, reset, setStatus };
