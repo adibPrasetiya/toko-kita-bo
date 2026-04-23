@@ -8,7 +8,12 @@ import { protectedRoute } from "../routes/protected.routes.js";
 
 export const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://toko-kita.adibprasetiya.com",
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 
 app.use(express.json());
