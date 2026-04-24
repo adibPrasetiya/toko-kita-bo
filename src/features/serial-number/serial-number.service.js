@@ -45,9 +45,15 @@ const createBulk = async (number = 10) => {
     skipDuplicates: true,
   });
 
+  const createdSerials = await prismaClient.serialNumbers.findMany({
+    where: {
+      serialNumberId: { in: finalSerialNumbers },
+    },
+  });
+
   return {
     message: `Berhasil menambahkan ${finalSerialNumbers.length} serial number baru`,
-    data: data,
+    data: createdSerials,
   };
 };
 
