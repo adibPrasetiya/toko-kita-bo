@@ -38,7 +38,7 @@ const createBulk = async (number = 10) => {
     (sn) => !existingSerialNumbers.has(sn),
   );
 
-  await prismaClient.serialNumbers.createMany({
+  const data = await prismaClient.serialNumbers.createMany({
     data: finalSerialNumbers.map((sn) => ({
       serialNumberId: sn,
     })),
@@ -47,6 +47,7 @@ const createBulk = async (number = 10) => {
 
   return {
     message: `Berhasil menambahkan ${finalSerialNumbers.length} serial number baru`,
+    data: data,
   };
 };
 

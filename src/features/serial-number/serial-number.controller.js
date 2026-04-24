@@ -4,7 +4,7 @@ const createBulk = async (req, res, next) => {
   try {
     const { number } = req.body || {};
     const result = await serialNumberService.createBulk(number);
-    res.status(200).json({ message: result.message }).end();
+    res.status(200).json({ message: result.message, data: result.data }).end();
   } catch (error) {
     next(error);
   }
