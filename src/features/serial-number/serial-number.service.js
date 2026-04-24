@@ -154,6 +154,7 @@ const register = async (body) => {
       shopName: validateInput.shopName,
       deviceId: validateInput.deviceId,
       isActivate: true,
+      status: "SOLD",
     },
   });
 
@@ -199,6 +200,7 @@ const reset = async (serialNumberId) => {
       clientName: null,
       clientPhoneNumber: null,
       shopName: null,
+      status: "AVAILABLE",
     },
   });
 

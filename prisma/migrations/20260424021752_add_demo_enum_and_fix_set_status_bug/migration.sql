@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `serial_numbers` MODIFY `status` ENUM('SOLD', 'AVAILABLE', 'SELL', 'DEMO') NOT NULL DEFAULT 'AVAILABLE';

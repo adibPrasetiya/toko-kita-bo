@@ -111,17 +111,20 @@ const setStatusSchema = Joi.object({
       "any.required": "Serial number wajib diisi",
     }),
 
-  status: Joi.string().valid("AVAILABLE", "SELL", "SOLD").optional().messages({
-    "string.base": "Status harus berupa teks",
-    "any.only": "Status hanya boleh AVAILABLE, SELL, atau SOLD",
-  }),
+  status: Joi.string()
+    .valid("AVAILABLE", "SELL", "SOLD", "DEMO")
+    .optional()
+    .messages({
+      "string.base": "Status harus berupa teks",
+      "any.only": "Status hanya boleh AVAILABLE, SELL, atau SOLD, DEMO",
+    }),
 
   notes: Joi.string().max(255).optional().messages({
     "string.base": "Notes harus berupa teks",
     "string.max": "Notes maksimal 255 karakter",
   }),
 })
-  .or("status", "notes") // 👈 ini kuncinya
+  .or("status", "notes")
   .messages({
     "object.missing": "Minimal harus mengisi status atau notes",
   });
